@@ -1,0 +1,69 @@
+<html>
+<head>
+<style type="text/css">
+tr.FAILURE {
+    background-color: red;
+}
+
+tr.SUCCESS {
+    background-color: green;
+} 
+body {
+    margin: 0px;
+    padding: 0px;
+  }
+  .container {
+    width: 100%;
+	height: 100%;
+
+  }
+
+   table, th, td { border: 1px solid black; }.
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script>
+function getAllBuilds(doneCallBack){
+	
+	$.ajax({
+	  url: 'http://127.0.0.1:500/getbuildsstatus',
+	  method: 'GET',
+	}).done(function(data) {
+		doneCallBack(JSON.parse(data));
+	});
+}
+function generaTable(data){
+	var	trHTML = '';
+	$.each(data.builds , function (i, item) {
+					if(item.status=='FAILURE'&false){
+						trHTML += '<tr class="'+item.status+'">';
+						trHTML += '<td><b>'+item.build_id+'</b></td>';
+						trHTML += '<td><b>'+item.investigator+'</b></td>';
+						trHTML += '<td><img src=' +item.status_img_url+'/></td>';
+						trHTML += '</tr>';
+					}
+			});
+	if(trHTML==''){
+		trHTML += '<tr class="SUCCESS"><td align="center"><img src="http://troll-face.ru/static/mg/5cc04a4488ba146d38b9f2032bf4abcb.jpg"></img></td></tr>';
+	}
+	//$("#build_table").empty();
+	var newTbody = $('<tbody></tbody>').append(trHTML);	
+	
+	$('#build_table > tbody').replaceWith(newTbody);
+}
+function generateContent(){
+	getAllBuilds(generaTable);
+	setTimeout(generateContent,5000);
+}
+$(document).ready(generateContent);
+
+
+</script>
+</head>
+
+<body>
+<table id="build_table" class="container" style="border-color:black!important">
+<thead>
+</thead><tbody/>
+</table>
+</body>
+</html>
