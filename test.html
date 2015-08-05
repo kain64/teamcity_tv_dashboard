@@ -34,7 +34,7 @@ function getAllBuilds(doneCallBack){
 function generaTable(data){
 	var	trHTML = '';
 	$.each(data.builds , function (i, item) {
-					if(item.status=='FAILURE'&false){
+					if(item.status=='FAILURE'){
 						trHTML += '<tr class="'+item.status+'">';
 						trHTML += '<td><b>'+item.build_id+'</b></td>';
 						trHTML += '<td><b>'+item.investigator+'</b></td>';
